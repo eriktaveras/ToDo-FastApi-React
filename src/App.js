@@ -1,45 +1,114 @@
 import React from 'react';
-import './App.css';
 import TaskForm from './TaskForm';
 import Task from './Task';
 import { TaskProvider, useTasks } from './TaskContext';
-// Asegúrate de tener Tailwind CSS importado en tu archivo de entrada o componente principal
-import './index.css';
+import { motion } from 'framer-motion';
 
 const TaskCounter = () => {
   const { tasks } = useTasks();
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(task => task.completed).length;
 
+  const numberAnimation = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 },
+    transition: { type: 'spring', stiffness: 300, damping: 20 },
+  };
+
   return (
-    <div className="my-4">
-      <p className="text-lg font-semibold">Total de Tareas: <span className="text-indigo-500">{totalTasks}</span></p>
-      <p className="text-lg font-semibold">Tareas Completadas: <span className="text-green-500">{completedTasks}</span></p>
-    </div>
+    <motion.div
+      className="my-8 p-6 max-w-md mx-auto bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.h3
+        className="text-xl font-semibold text-gray-800 mb-4"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        Resumen de Tareas
+      </motion.h3>
+      <motion.div
+        className="flex justify-between items-center"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="flex items-center">
+          <span className="text-lg font-medium text-gray-700">Total de Tareas:</span>
+        </div>
+        <motion.span {...numberAnimation} className="text-lg text-blue-600 font-semibold">
+          {totalTasks}
+        </motion.span>
+      </motion.div>
+      <motion.div
+        className="flex justify-between items-center mt-4"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="flex items-center">
+          <span className="text-lg font-medium text-gray-700">Tareas Completadas:</span>
+        </div>
+        <motion.span {...numberAnimation} className="text-lg text-green-600 font-semibold">
+          {completedTasks}
+        </motion.span>
+      </motion.div>
+    </motion.div>
   );
 };
 
 function TaskList() {
-  const { tasks, loading, error } = useTasks();
-
-  if (loading) return <div className="text-center my-2">Cargando...</div>;
-  if (error) return <div className="text-red-500 my-2">Error: {error}</div>;
+  const { tasks, error } = useTasks();
 
   return (
-    <ul className="list-none p-0 m-0">
-      {tasks.map(task => (
-        <Task key={task.id} task={task} />
-      ))}
-    </ul>
+    <motion.div
+      className="my-5"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {error && (
+        <motion.div
+          className="text-center text-red-600"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          Error: {error}
+        </motion.div>
+      )}
+      <ul className="space-y-4">
+        {tasks.map(task => (
+          <motion.li
+            key={task.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Task task={task} />
+          </motion.li>
+        ))}
+      </ul>
+    </motion.div>
   );
 }
 
 function App() {
   return (
     <TaskProvider>
-      <div className="App bg-gray-100 min-h-screen pt-10">
-        <header className="text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">Lista de Tareas</h1>
+      <div className="bg-gray-50 min-h-screen pt-10">
+        <header className="max-w-4xl mx-auto px-5">
+          <h1
+            className="text-4xl font-bold text-gray-800 mb-10 text-center"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Lista de Tareas
+          </h1>
           <TaskForm />
           <TaskCounter />
           <TaskList />

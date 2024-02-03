@@ -1,8 +1,14 @@
 // src/api.js
 const BASE_URL = 'http://localhost:8000/tasks/';
 
-export const fetchTasks = async () => {
-  const response = await fetch(BASE_URL);
+export const fetchTasks = async (sortField) => {
+  // Construir la URL con el parámetro de consulta
+  const url = new URL(BASE_URL);
+  if (sortField) {
+    url.searchParams.append('sort', sortField);
+  }
+
+  const response = await fetch(url.toString());
   if (!response.ok) {
     throw new Error('Error al cargar las tareas');
   }

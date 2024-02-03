@@ -3,34 +3,38 @@ import { useTasks } from './TaskContext';
 
 function TaskForm() {
   const [taskName, setTaskName] = useState('');
-  const { addTask } = useTasks(); // Correctamente extrae addTask del contexto
+  const { addTask } = useTasks();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (taskName.trim()) {
-      await addTask({ name: taskName, completed: false });
-      setTaskName('');
-    }
+    if (!taskName.trim()) return;
+    await addTask({ name: taskName, completed: false });
+    setTaskName('');
+    // Opcional: Agregar feedback visual o sonoro aquí para confirmar la adición
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto my-8">
-      <div className="flex items-center space-x-4">
-        <input
-          type="text"
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
-          placeholder="Enter a task name"
-          className="flex-1 p-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-        />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          Add Task
-        </button>
-      </div>
-    </form>
+    <div className="flex justify-center mt-12 mb-8">
+      <form onSubmit={handleSubmit} className="w-full max-w-md">
+        <div className="flex items-center border-b border-indigo-500 py-2">
+          <input
+            className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none placeholder-gray-400"
+            type="text"
+            placeholder="What needs to be done?"
+            aria-label="Task name"
+            value={taskName}
+            onChange={(e) => setTaskName(e.target.value)}
+            required
+          />
+          <button
+            className="flex-shrink-0 bg-indigo-500 hover:bg-indigo-600 text-sm text-white py-1 px-2 rounded"
+            type="submit"
+          >
+            Add
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
 
